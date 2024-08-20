@@ -60,7 +60,7 @@ In its place __Python__ has the `None` constant that represents the absence of a
 
 __Rust__ just goes straight to `Option` which can be either `Some` which contains a value or `None` which does not contain a value.
 
-In both __Python__ and __Rust__ I can’t get a null pointer exception because null just doesn’t exist. That’s a nice feature and would have saved me many, many hours in my developer career.
+In both __Python__ and __Rust__ I __cannot__ get a null pointer exception because null just doesn’t exist. That’s a nice feature and would have saved me many, many hours in my developer career.
 
 Having and not having null changes what’s in my unit tests.
 
@@ -188,6 +188,7 @@ All four languages were kind of the same here. Above, I called out running into 
 |Typescript| number|
 
 I probably made a bad choice for the type of my frequency value in Rust. I chose u32. Summing all the frequency values gave me a u32. However, the index for each element of my palindrome character array was a usize. I found myself constantly casting my u32 to usize.
+
 Fortunately, all languages inferred types for me and did save me a lot of work.  
 
 ### Summing a list of values
@@ -244,7 +245,7 @@ return palindrome.join('');
 return String::from_iter(palindrome.iter());
 ```
 
-### Final
+### Summary
 
 In summary, 
 
