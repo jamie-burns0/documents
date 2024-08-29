@@ -2,6 +2,36 @@
 
 hide empty members
 
-interface Action
+interface Action<T> <<sealed>> #MistyRose {}
+
+class KeepAction<T> << (R, Orange ) record>> #MistyRose implements Action {
+    T data
+}
+class RemoveAction<T> << (R, Orange ) record>> #MistyRose implements Action {
+    T data
+}
+
+interface GroupFiles<K> {
+    Map<K, List<FileData>> groupFiles(List<FileData> fileDataList)
+    Map<K, List<FileData>> regroupFiles(Map<?, List<FileData>> fileDataGroupedByMap)
+}
+
+class GroupFilesBySize<Long> << final >> implements GroupFiles {}
+
+abstract class GroupFilesByHash<String> implements GroupFiles {
+    {abstract} String generateHashString(FileData fileData, long chunkSize, MessageDigest digest)
+    {abstract} FileData newFileData( FileData fileData, String hashString )
+}
+
+class GroupFilesByChunkHash<String> << final >> extends GroupFilesByHash {}
+class GroupFilesByFullHash<String> << final >> extends GroupFilesByHash {}
+
+class FileData << (R, Orange ) record>> {
+    String filename
+    String path
+    long sizeInBytes
+    Optional<String> chunkHash
+    Optional<String> fullHash
+}
 
 @enduml
