@@ -1,0 +1,7 @@
+@startuml
+
+hide empty members
+
+abstract class ABC implements XYZ
+
+@enduml
