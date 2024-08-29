@@ -1,7 +1,7 @@
-@startuml
+@startuml myclassdiagram
 
 hide empty members
 
-abstract class ABC implements XYZ
+interface Action
 
 @enduml

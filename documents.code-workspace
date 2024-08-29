@@ -1,12 +1,12 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"java.project.explorer.showNonJavaResources": true,
-		"java.dependency.packagePresentation": "flat"
-		"java.configuration.updateBuildConfiguration": "disabled"
-	}
+        "folders": [
+                {
+                        "path": "."
+                }
+        ],
+        "settings": {
+		"files.autoSave": "afterDelay",
+                "plantuml.jar": "/opt/plantuml/plantuml-1.2024.6/plantuml-1.2024.6.jar",
+                "plantuml.java": "/opt/java/latest/bin/java"
+        }
 }
