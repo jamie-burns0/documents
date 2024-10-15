@@ -88,7 +88,7 @@ func TestAValidMapWithMultipleEntriesReturnsTrue( t *testing.T ) {
     ...
 ```
 
-Anywhere else, that trailing comma after the `4` would have been a syntax error. But with __Go__, its a syntax error if there's __no__ trailing comma. In a weird way, its good. I don't know how may times I've added a new last entry to a list like this - in JSON files, in enums, in `List.of(...)` - and forgotten to add a comma to what is now the second-last line. A nice thing with the __Go__ syntax, is that second-last line would have had a trailing comma and I wouldn't have had an error.
+Anywhere else, that trailing comma after the `4` would have been a syntax error. But with __Go__, its a syntax error if there's __no__ trailing comma. In a weird way, its good. I don't know how many times I've added a new last entry to a list like this - in JSON files, in enums, in `List.of(...)` - and forgotten to add a comma to what is now the second-last line. A nice thing with the __Go__ syntax, is that second-last line would have had a trailing comma and I wouldn't have had an error.
 
 One final thought about the syntactic sugar is the lack of noise. I don't need as many parentheses and I don't need semi-colons. The code looks a lot cleaner.
 
