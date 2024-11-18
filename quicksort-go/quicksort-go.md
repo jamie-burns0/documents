@@ -14,7 +14,7 @@ In the `partition` method, we have pointers at either end of a segment that conv
 
 #### 1M ints
 
-For testing, I settled on a slice of int with a capacity 1,000,000 and populated this with random ints. On test cases, the range of random ints varied from 0-1000000, 0-100000,...,0-10. For the first set, the likelyhood of repeating or ordered values was going to be low, through to the last set, where the likelyhood of repeating or ordered values was going to be high.
+For testing, I settled on a slice of int with capacity 1,000,000 and populated this with random ints. In test cases, the range of random ints varied from 0-1000000, 0-100000,...,0-10. For the first set, the likelyhood of repeating or ordered values was going to be low, through to the last set, where the likelyhood of repeating or ordered values was going to be high.
 
 #### Idea one
 
@@ -76,11 +76,11 @@ To solve this, a done channel was created. When a segment was guaranteed to be i
 	}
 ```
 
-#### order optimisation
+#### Order optimisation
 
-I explored an optimisation around detecting when a segment being partitioned was is in sorted order. As the likelyhood of ordered partitions increased this seemed like an easy winner. It introduced a lot of complexity into partitioning, and mostly performed poorer than code that didn't look for ordered segments.
+I explored an optimisation around detecting when a segment being partitioned is in sorted order. As the likelyhood of ordered partitions increased this seemed an easy winner. It introduced a lot of complexity into partitioning, and mostly performed poorer than code that didn't look for ordered segments.
 
-#### partition goroutines
+#### Partition goroutines
 
 Of the three goroutines in our asynchronous quicksort, the partition goroutine does the most work. So in `AsyncSort2` and `AsyncSort2B`, we launch four partition goroutines.
 
