@@ -11,20 +11,31 @@ class RemoveAction<T> << (R, Orange ) record>> #MistyRose implements Action {
     T data
 }
 
-interface GroupFiles<K> {
-    Map<K, List<FileData>> groupFiles(List<FileData> fileDataList)
-    Map<K, List<FileData>> regroupFiles(Map<?, List<FileData>> fileDataGroupedByMap)
+note right of RemoveAction
+    records are
+    final
+end note
+
+together {
+
+    interface GroupFiles<K> {
+        Map<K, List<FileData>> groupFiles(List<FileData> fileDataList)
+        Map<K, List<FileData>> regroupFiles(Map<?, List<FileData>> fileDataGroupedByMap)
+    }
+
+    class GroupFilesBySize<Long> << final >> implements GroupFiles {}
+
+    abstract class GroupFilesByHash<String> implements GroupFiles {
+        {abstract} String generateHashString(FileData fileData, long chunkSize, MessageDigest digest)
+        {abstract} FileData newFileData( FileData fileData, String hashString )
+    }
+
+    class GroupFilesByChunkHash<String> << final >> extends GroupFilesByHash {}
+    class GroupFilesByFullHash<String> << final >> extends GroupFilesByHash {}
 }
 
-class GroupFilesBySize<Long> << final >> implements GroupFiles {}
-
-abstract class GroupFilesByHash<String> implements GroupFiles {
-    {abstract} String generateHashString(FileData fileData, long chunkSize, MessageDigest digest)
-    {abstract} FileData newFileData( FileData fileData, String hashString )
-}
-
-class GroupFilesByChunkHash<String> << final >> extends GroupFilesByHash {}
-class GroupFilesByFullHash<String> << final >> extends GroupFilesByHash {}
+KeepAction -[hidden]- GroupFiles
+KeepAction -left[hidden]- FileData
 
 class FileData << (R, Orange ) record>> {
     String filename

@@ -1,0 +1,36 @@
+@startuml
+
+hide empty description
+
+state "Segment Channel" as SC #lightblue
+
+[*] -r-> SC : seed segment
+
+state "<<goroutine>>\nget pivot value for segment" as GPVFS 
+
+SC -r-> GPVFS : segment
+
+state "Pivot Value Channel" as PVC #lightblue
+
+GPVFS -r-> PVC : pivot value
+
+state "<<goroutine>>\npartition segment" as PS
+
+PVC -r-> PS : pivot value
+
+state "Pivot Index Channel" as PIC #lightblue
+
+PS -d-> PIC : pivot index
+
+state "<<goroutine>>\nget segments" as GS
+
+PIC -l-> GS : pivot index
+
+state "Done Channel" as DC #lightblue
+
+GS -u-> SC : unordered segment
+GS -l-> DC : ordered segment
+
+DC -l-> [*] : done\n[all segments sorted]
+
+@enduml
