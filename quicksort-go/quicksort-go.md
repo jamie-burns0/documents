@@ -76,29 +76,29 @@ To solve this, a done channel was created. When a segment was guaranteed to be i
 	}
 ```
 
+#### order optimisation
+
+I explored an optimisation around detecting when a segment being partitioned was is in sorted order. As the likelyhood of ordered partitions increased this seemed like an easy winner. It introduced a lot of complexity into partitioning, and mostly performed poorer than code that didn't look for ordered segments.
+
 #### partition goroutines
 
-Of the three goroutines in my asynchronous quicksort, the partition goroutine does the most work. So in `AsyncSort2`, we launch four partition goroutines.
+Of the three goroutines in our asynchronous quicksort, the partition goroutine does the most work. So in `AsyncSort2` and `AsyncSort2B`, we launch four partition goroutines.
 
-I was surprised by the result. Running four partition goroutines was always quicker than running just one partition goroutine. However, running four partition goroutines was not always quicker than the original iterative quicksort where there were no goroutines.
+I was surprised by the result. Running four partition goroutines on its own was not a winner. However, running four partition goroutines that included detecting if the segment was in order resulted in faster sorts than our iterative sort, `Sort`, in certain conditions.
 
-As described earlier, I ran tests where we sorted 1M ints with random values from 0-1000000, 0-100000,...,0-10. For 1M ints where the likelyhood of ordered segments was low (0-1000000), running four partition goroutines was significantly slower than the original iterative quicksort. At the other end of the scale where the likelyhood of ordered segments was high (0-10), running four partition goroutines was about 25% faster than the original iterative quicksort.
+As described earlier, I ran tests where we sorted 1M ints with random values from 0-1000000, 0-100000,...,0-10. For 1M ints where the likelyhood of ordered segments was low (0-1000000), running four partition goroutines with order optimisation was significantly slower than the original iterative quicksort. At the other end of the scale where the likelyhood of ordered segments was high (0-10), running four partition goroutines with order optimisation was about 25% faster than the original iterative quicksort.
 
-In the graph below, the grey arrow points to the sort time when running four partition goroutines. The red arrow points to the sort time when running the original iterative quicksort. Y-axis is the sort time in milliseconds. X-axis is the range of random int values in the sort - 0-1000000, 0-100000,...,0-10. We are sorting 1M random ints.
+In the graph below, the grey arrow points to the sort time when running four partition goroutines with order optimisation, `AsyncSort2`. The red arrow points to the sort time when running the original iterative quicksort, `Sort`. Y-axis is the sort time in milliseconds. X-axis is the range of random int values in the sort - 0-1000000, 0-100000,...,0-10. We are sorting 1M random ints.
 
 ![quicksort execution time graph](quicksort-execution-time-graph.png)
 
-Our original iterative sort is very linear and consistently fastest or close second-best. Running four partitions is significantly slower until our ints are in the range 0-10000. From there on it runs a bit faster than our iterative sort.
-
-#### order optimisation
-
-My final idea for optimisation was to detect when a segment being partitioned was in sorted order. As the likelyhood of ordered partitions increased this seemed like an easy winner. Not so. Aside from introducing a lot of complexity into partitioning, this always performed poorer than never detecting an ordered segment.
+`Sort` is very linear and consistently fastest or close second-best. Running `AsyncSort2` is significantly slower until our ints are in the range 0-10000. From there on it runs a bit faster than our iterative sort.
 
 ### Conclusion
 
-The simple synchronous iterative quicksort was the best or close second-best performer in all scenarios. It scales well. The code is simple and easy to maintain.
+The simple synchronous iterative quicksort, `Sort` was the best or close second-best performer in all scenarios. It scales well. The code is simple and easy to maintain.
 
-The asynchronous order optimised quicksort with up to four partition goroutines performed better as the likelyhood of ordered partitions increased. The code is more complicated. The buffered channel sizes need tuning to avoid deadlocks.
+The asynchronous order optimised quicksort with up to four partition goroutines, `AsyncSort2`, performed better as the likelyhood of ordered partitions increased. The code is more complicated. The buffered channel sizes need tuning to avoid deadlocks.
 
 For me, the use case for the asynchronous quicksort would be where, (1) the data sets are known to contain tightly constrained or high likelyhood of repeating values __and__, (2) performance is really, really important.
 
