@@ -8,7 +8,7 @@ There's not much between the two implementations, but, for me, I prefer the Go i
 
 ### Optimisation investigation
 
-A feature of Go is its concurrency support. Hoare's Quicksort divide-and-conquer approach seemed like a good opportunity to both explore Go's concurrency and see if concurrency would improve performance of the sort.
+A feature of Go is its concurrency support. Hoare's Quicksort divide-and-conquer strategy seemed like a good opportunity to both explore Go's concurrency and see if concurrency would improve performance of the sort.
 
 In the `partition` method, we have pointers at either end of a segment that converge on a pivot value. When `partition` is done we should know the index of our pivot value and every value less than our pivot value will be left of the index and every value greater on the right.
 
@@ -86,7 +86,11 @@ Of the three goroutines in our asynchronous quicksort, the partition goroutine d
 
 I was surprised by the result. Running four partition goroutines on its own was not a winner. However, running four partition goroutines that included detecting if the segment was in order resulted in faster sorts than our iterative sort, `Sort`, in certain conditions.
 
-As described earlier, I ran tests where we sorted 1M ints with random values from 0-1000000, 0-100000,...,0-10. For 1M ints where the likelyhood of ordered segments was low (0-1000000), running four partition goroutines with order optimisation was significantly slower than the original iterative quicksort. At the other end of the scale where the likelyhood of ordered segments was high (0-10), running four partition goroutines with order optimisation was about 25% faster than the original iterative quicksort.
+As described earlier, I ran tests where we sorted 1M ints with random values from 0-1000000, 0-100000,...,0-10.
+
+For 1M ints where the likelyhood of ordered segments was low (0-1000000), running four partition goroutines with order optimisation was significantly slower than the original iterative quicksort.
+
+At the other end of the scale where the likelyhood of ordered segments was high (0-10), running four partition goroutines with order optimisation was about 25% faster than the original iterative quicksort.
 
 In the graph below, the grey arrow points to the sort time when running four partition goroutines with order optimisation, `AsyncSort2`. The red arrow points to the sort time when running the original iterative quicksort, `Sort`. Y-axis is the sort time in milliseconds. X-axis is the range of random int values in the sort - 0-1000000, 0-100000,...,0-10. We are sorting 1M random ints.
 
