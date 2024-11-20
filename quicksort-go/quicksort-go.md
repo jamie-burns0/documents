@@ -110,4 +110,4 @@ For any other use case, I would choose to implement the simple synchronous itera
 
 ___
 #### Source code
-https://github.com/jamie-burns0/quicksort-go
+[https://github.com/jamie-burns0/quicksort-go](https://github.com/jamie-burns0/go/tree/main/quicksort-go)
